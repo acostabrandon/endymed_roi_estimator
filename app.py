@@ -4,8 +4,7 @@ import pandas as pd
 import streamlit as st
 
 st.set_page_config(
-    page_title="EndyMed PRO MAX Practice Revenue Planner",
-    page_icon="💜",
+    page_title="EndyMed PRO MAX Practice Revenue Estimator",
     layout="wide",
 )
 
