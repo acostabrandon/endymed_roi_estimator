@@ -1,3 +1,8 @@
+from io import BytesIO
+
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
 from pathlib import Path
 
 import pandas as pd
@@ -175,6 +180,94 @@ def render_summary_card(title: str, value: str) -> None:
         unsafe_allow_html=True,
     )
 
+def build_pdf_summary(
+    all_results: list[dict],
+    gross_low: float,
+    gross_high: float,
+    total_consumable: float,
+    adjusted_low: float,
+    adjusted_high: float,
+    annual_low: float,
+    annual_high: float,
+    finance_payment: float = 0.0,
+) -> bytes:
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    left = 50
+    top = height - 50
+    line_gap = 18
+    y = top
+
+    def write_line(text: str, font="Helvetica", size=10, extra_gap=0):
+        nonlocal y
+        c.setFont(font, size)
+        c.drawString(left, y, text)
+        y -= (line_gap + extra_gap)
+
+    c.setTitle("EndyMed_PRO_MAX_ROI_Summary")
+
+    write_line("EndyMed PRO MAX Practice Revenue Planner", font="Helvetica-Bold", size=16, extra_gap=4)
+    write_line("Scenario Summary", font="Helvetica-Bold", size=12, extra_gap=6)
+    write_line("Internal planning estimate only. Not a guarantee of profitability.", size=9, extra_gap=10)
+
+    write_line("Selected Treatments", font="Helvetica-Bold", size=11, extra_gap=2)
+
+    if not all_results:
+        write_line("- No treatments selected.", size=10, extra_gap=6)
+    else:
+        for idx, r in enumerate(all_results, start=1):
+            mode_label = "Package Pricing" if r["pricing_mode"] == "package" else "Per Session Pricing"
+            volume_label = r["volume_label"]
+            line = (
+                f"{idx}. {r['section']} — {r['preset_name']} | "
+                f"{mode_label} | {volume_label}: {r['volume']} | "
+                f"Monthly Adjusted: {money(r['monthly_adjusted_low'])} – {money(r['monthly_adjusted_high'])}"
+            )
+
+            # simple line wrap
+            max_chars = 100
+            while len(line) > max_chars:
+                split_at = line.rfind(" ", 0, max_chars)
+                if split_at == -1:
+                    split_at = max_chars
+                write_line(line[:split_at], size=9)
+                line = "   " + line[split_at:].strip()
+            write_line(line, size=9)
+
+            if y < 120:
+                c.showPage()
+                y = top
+                c.setFont("Helvetica", 10)
+
+    write_line("", extra_gap=4)
+    write_line("Revenue Summary", font="Helvetica-Bold", size=11, extra_gap=2)
+    write_line(f"Total Monthly Gross Revenue: {money(gross_low)} – {money(gross_high)}")
+    write_line(f"Total Monthly Direct Consumable Cost: {money(total_consumable)}")
+    write_line(f"Total Monthly Adjusted Revenue: {money(adjusted_low)} – {money(adjusted_high)}")
+    write_line(f"Annualized Adjusted Revenue: {money(annual_low)} – {money(annual_high)}")
+
+    if finance_payment > 0:
+        post_finance_low = adjusted_low - finance_payment
+        post_finance_high = adjusted_high - finance_payment
+        write_line("", extra_gap=4)
+        write_line("Finance Input", font="Helvetica-Bold", size=11, extra_gap=2)
+        write_line(f"Monthly Finance Payment: {money(finance_payment)}")
+        write_line(
+            f"Post-Finance Monthly Adjusted Revenue: {money(post_finance_low)} – {money(post_finance_high)}"
+        )
+
+    write_line("", extra_gap=6)
+    write_line(
+        "Excludes taxes, provider compensation, overhead, marketing allocation, labor allocation, "
+        "and other operating costs unless modeled elsewhere.",
+        size=8,
+    )
+
+    c.save()
+    buffer.seek(0)
+    return buffer.getvalue()
 
 def init_state(df: pd.DataFrame) -> None:
     if "preset_map" not in st.session_state:
@@ -540,7 +633,25 @@ def main() -> None:
                 "Post-Finance Monthly Adjusted Revenue",
                 f"{money(post_finance_low)} – {money(post_finance_high)}",
             )
+    pdf_bytes = build_pdf_summary(
+        all_results=all_results,
+        gross_low=gross_low,
+        gross_high=gross_high,
+        total_consumable=total_consumable,
+        adjusted_low=adjusted_low,
+        adjusted_high=adjusted_high,
+        annual_low=annual_low,
+        annual_high=annual_high,
+        finance_payment=finance_payment if "finance_payment" in locals() else 0.0,
+    )
 
+    st.download_button(
+        label="Download PDF Summary",
+        data=pdf_bytes,
+        file_name="endymed_pro_max_revenue_summary.pdf",
+        mime="application/pdf",
+        use_container_width=False,
+    )
     st.caption(
         "Internal planning estimate only. Excludes taxes, provider compensation, overhead, marketing allocation, labor allocation, and other operating costs unless modeled elsewhere."
     )
