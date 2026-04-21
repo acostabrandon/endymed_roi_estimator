@@ -1,0 +1,13 @@
+section,preset_name,pricing_mode_default,sessions_default,package_low,package_high,per_session_low,per_session_high,consumable_per_session,combo_consumable_mode,is_combo,display_order,active_in_app,notes_for_build
+Face T+C,iFine MAX (EndyEye),package,6,1275,1800,250,350,0,none,No,1,Yes,
+Face T+C,Small MAX (Face Tightening),package,6,1800,3300,350,650,0,none,No,2,Yes,
+Face T+C,Mini Shaper MAX (Submental),package,6,1800,2800,350,550,0,none,No,3,Yes,
+Body T+C,Mini Shaper MAX (Small Body Areas),package,8,1700,3750,250,550,0,none,No,1,Yes,
+Body T+C,Shaper MAX (Large Body Areas),package,8,1700,3750,250,550,0,none,No,2,Yes,
+Body T+C,Contour MAX (Vacuum-Assisted RF),package,8,1700,3750,250,550,0,none,No,3,Yes,
+Fractional,Fractional Skin Resurfacing (FSR MAX),package,3,1400,2550,550,1000,100,per_fractional_handpiece,No,1,Yes,
+Fractional,RF Microneedling (Intensif MAX),package,3,1650,3050,650,1200,100,per_fractional_handpiece,No,2,Yes,
+Combo,Full Face Restoration (FSR + RFMN),package,3,2900,5950,1200,2200,200,per_fractional_handpiece,Yes,1,Yes,
+Combo,EndyEye Duo (iFine + FSR),package,6,1800,2800,500,700,100,per_fractional_handpiece,Yes,2,Yes,
+Combo,EndyEye Advanced (FSR + RFMN),package,3,2550,3250,1000,1200,200,per_fractional_handpiece,Yes,3,Yes,
+Combo,Stretch Mark Remodeling (Shaper + RFMN),package,8,2200,5700,500,1200,100,per_fractional_handpiece,Yes,4,Yes,
