@@ -68,27 +68,27 @@ def inject_css() -> None:
         }
 
         .top-note {
-            border: 1px solid rgba(255,255,255,0.10);
-            background: rgba(60, 120, 255, 0.10);
+            border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+            background: color-mix(in srgb, var(--primary-color) 10%, var(--background-color));
             border-radius: 16px;
             padding: 16px 18px;
             margin-bottom: 24px;
-            color: #d9e6ff;
+            color: var(--text-color);
             font-size: 1.02rem;
             line-height: 1.45;
         }
 
         .value-card {
-            border: 1px solid rgba(255,255,255,0.10);
+            border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
             border-radius: 16px;
             padding: 18px 18px 16px 18px;
-            background: rgba(255,255,255,0.02);
+            background: color-mix(in srgb, var(--secondary-background-color) 65%, transparent);
             min-height: 118px;
         }
 
         .card-title {
             font-size: 0.92rem;
-            color: rgba(255,255,255,0.72);
+            color: color-mix(in srgb, var(--text-color) 68%, transparent);
             margin-bottom: 12px;
         }
 
@@ -96,28 +96,28 @@ def inject_css() -> None:
             font-size: 1.7rem;
             font-weight: 750;
             line-height: 1.2;
-            color: #ffffff;
+            color: var(--text-color);
             letter-spacing: -0.01em;
         }
 
         .card-help {
             margin-top: 10px;
-            color: rgba(255,255,255,0.68);
+            color: color-mix(in srgb, var(--text-color) 72%, transparent);
             font-size: 0.88rem;
             line-height: 1.35;
         }
 
         .summary-card {
-            border: 1px solid rgba(255,255,255,0.12);
+            border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
             border-radius: 18px;
             padding: 18px 20px;
-            background: rgba(255,255,255,0.03);
+            background: color-mix(in srgb, var(--secondary-background-color) 75%, transparent);
             min-height: 124px;
         }
 
         .summary-title {
             font-size: 0.9rem;
-            color: rgba(255,255,255,0.7);
+            color: color-mix(in srgb, var(--text-color) 70%, transparent);
             margin-bottom: 10px;
         }
 
@@ -125,12 +125,12 @@ def inject_css() -> None:
             font-size: 1.8rem;
             line-height: 1.15;
             font-weight: 800;
-            color: #ffffff;
+            color: var(--text-color);
             letter-spacing: -0.01em;
         }
 
         div[data-testid="stExpander"] {
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid color-mix(in srgb, var(--text-color) 8%, transparent);
             border-radius: 16px;
             overflow: hidden;
             margin-bottom: 14px;
@@ -142,7 +142,7 @@ def inject_css() -> None:
         }
 
         .small-muted {
-            color: rgba(255,255,255,0.68);
+            color: color-mix(in srgb, var(--text-color) 72%, transparent);
             font-size: 0.92rem;
         }
 
