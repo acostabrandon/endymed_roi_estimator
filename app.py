@@ -47,8 +47,9 @@ def init_state(df: pd.DataFrame) -> None:
     if "row_count" not in st.session_state:
         st.session_state.row_count = 1
     if "preset_map" not in st.session_state:
+        records = df.to_dict(orient="records")
         st.session_state.preset_map = {
-            row.option_label: row.to_dict() for row in df.itertuples(index=False)
+            record["option_label"]: record for record in records
         }
 
 
